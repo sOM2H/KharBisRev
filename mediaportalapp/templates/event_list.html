@@ -1,0 +1,35 @@
+{% extends 'index.html' %}
+{% block content %}
+        <section class="calendar__block" id="calendar__block">
+
+                <div class="container">
+                        {% for event in events %}
+            
+                    <div class="calendar">
+                        <div class="calendar-box">
+                            <div class="calendar-image"><img src="{{ event.image.url }} " alt=""></div>
+                            <div class="calendar-date-number">
+                                <p>{{ event.day }}</p>
+                                <p>{{ event.start_time }} : {{ event.end_time }}</p>
+                            </div>
+                            <div class="calendar-name"><a href="{{ event.get_absolute_url }}"> {{ event.title }} </a></div>
+                        <div class="calendar-link">
+                            <a href="">О мероприятии</a>
+                        </div>
+                     </div>
+                    </div>
+                    {% endfor %}
+            
+            
+                </div>
+            
+            
+            
+            
+            </section>
+            {% endblock content %}
+
+
+
+
+

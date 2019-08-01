@@ -1,0 +1,30 @@
+{% extends 'index.html' %}
+{% block content %}
+<section class="" id="publication">
+    <div class="container">
+        
+        <div class="publication">
+            <div class="publication-title"><h1 style="text-align:center;">{{ raiting.title }}</h1>
+            </div>
+            <div class="publication-paragraphs">
+                <p></p>
+                <p></p>
+                <div class="p-imaged">
+                   <p>{{ raiting.content }}</p><img src="{{ raiting.image.url }}" alt="" class="wow fadeInRight">                
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    wow = new WOW( {
+             boxClass:     'wow',
+            animateClass: 'animated',
+                offset:       100
+            }
+        );
+    
+        wow.init();
+</script>
+{% endblock content %}
+

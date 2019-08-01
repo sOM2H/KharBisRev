@@ -1,0 +1,21 @@
+{% extends 'index.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+<section id="regestration-page">
+    <div class="container-reg text-center registration">
+        <div class="">Регистрация пользователя</div>    
+            <div class=''>
+                <form action="" method="POST" style="text-align:center;">
+                    {{ form.error }}
+                    {% csrf_token %}
+                    {{ form|crispy }}<br>
+                    <button type="submit" id="registration" class="btn btn-primary">Зарегестрироваться</button>
+    
+                </form>
+            </div>
+    </div>
+</section>
+<!--нужно выровнять форму и отцентровать ее, по примеру второго дива. Форму сделать более читаемой-->
+{% endblock content %}
+

@@ -1,0 +1,78 @@
+    <header class="header" id="header"><div class="header__soclinks">
+            <ul>
+                <li><a href="https://t.me/KH_business"><i class="fa fa-telegram " aria-hidden="true"></i>
+                </a></li>
+                <li><a href="https://www.youtube.com/channel/UCFOkaFk_FxafZg3T8nqR9sA/featured?view_as=subscriber"><i class="fa fa-youtube" aria-hidden="true"></i>
+                </a></li>
+    
+                <li><a href="https://www.facebook.com/KhBusinessReview/"><i class="fa fa-facebook" aria-hidden="true"></i>
+                </a></li>
+                <li><a href="https://www.instagram.com/kh_business_review/"><i class="fa fa-instagram"></i></a>
+                </li>
+                <li><a href="https://www.linkedin.com/showcase/khbr/about/?viewAsMember=true"><i class="fa fa-linkedin" aria-hidden="true"></i>
+                </a></i>
+<li><a href="#header"><i class="fa fa-angle-double-up" aria-hidden="true"></i>
+        </a></li>
+            <li><a href="#footer"><i class="fa fa-angle-double-down" aria-hidden="true"></i>
+            </a></li>
+            </ul>
+        </div>
+            <div class="container-header">
+                <div class="header__wrapper">
+                    <div class="header__navigation">
+                        <ul class="menu">
+                            <li><a href="{% url 'base_view' %}" style="color:#fff;">Аналитика</a><ul class="submenu">
+                                {% for category in categories %}
+                                <li><a href=' {{ category.get_absolute_url }} '>{{ category.name }}</a></li>
+                                {% endfor %}
+                            </ul></li>
+                            <li><a href="{% url 'raitings_list' %}">Рейтинги</a></li>
+                            <li><a href="{% url 'video_view' %}">Видеообзоры</a></li>
+                            <li><a href="{% url 'events_view' %}">Календарь</a></li>
+                        </ul>
+                    </div>
+                    <div class="search__header">
+                        <form action="{% url 'search_view' %}" method="GET">
+                            <input type="search" placeholder="Поиск" name="q">
+                            <button class="btn btn-primary btn-sm" type="submit" style="background-color: #757575;"><i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                    </div>
+        
+                    <div class="header__icons">
+                        {% if not request.user.is_authenticated %}
+        
+                        <a href="{% url 'login' %}" class="header__login__link" style="margin-top: 5px;color:#a6a6a6;">
+                            <i class="fa fa-user-circle-o" aria-hidden="true">
+                            </i>
+                        </a>
+                        {% else %}
+                        <a href="" class="header__login__link">Здравствуйте, {{ request.user|truncatewords:15 }}</a>
+                        <a href="{% url 'logout_view' %}" style="margin-left:12px;">Выйти</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+    <script>
+            $(document).ready(function(){
+                $('.article').on('mouseenter', function(){
+                    var article_id = $(this).attr('data-id')
+                    data = {
+                        article_id: article_id
+                    }
+                    $.ajax({
+                        type: 'GET',
+                        url: '{% url "article_image" %}',
+                        data: data,
+                        dataType: 'json',
+                        success: function(data){
+                            $('#article_image').html('<img style="width:300px; height:300px;" src="http://127.0.0.1:8000'+data.article_image+'">')
+                        }            
+                    })
+                })
+        
+            });
+        </script>
+</header>
+
+

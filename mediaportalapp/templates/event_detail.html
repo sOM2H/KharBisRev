@@ -1,0 +1,29 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="post-calendar">
+
+        <div class="post-calendar-date-location">
+            <p class="calendar-date">{{ event.start_time}} : {{ event.end_time}}</p>
+            <span>|</span>
+            <p class="calendar-location">{{ event.place }}</p>
+    
+        </div>
+        <h1 class="post-calendar-title">{{ event.title }}</h1>
+        <div class="post-calendar-image">
+            <img src="{{ event.image.url }} " alt="">
+        </div>
+        <div class="post-calendar-text">
+            <div class="calendar-content">
+                <h2>Lorem, ipsum dolor.</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, delectus. Dolorum, velit sequi quia voluptatum magnam praesentium ipsum mollitia error aut ipsam repudiandae eligendi repellat!</p>
+            </div>
+            <h2 class="post-calendar-title-time">
+                Время и место:
+            </h2>
+            <p class="calendar-date">{{ event.start_time}} : {{ event.end_time}}</p>
+            <p class="calendar-date">{{ event.day }}</p>
+            <p class="calendar-location">{{ event.place }}</p>
+        </div>
+    </div>
+
+{% endblock content %}

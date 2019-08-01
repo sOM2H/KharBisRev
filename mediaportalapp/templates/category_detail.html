@@ -1,0 +1,24 @@
+{% extends 'index.html' %}
+{% block content %}
+
+    <h2 class="category-detail-title"> Статья из категории {{ category.name }}</h2>
+        {% for article in articles_from_category %}
+        <div style="margin:0 100px;">
+        <div class="feed__wrapper" style="margin-bottom:15px;     display: flex;
+     flex-direction: row;
+">
+            <div class="feed-image" style=  flex:1;
+     order: 1;
+ ">
+                <img src="{{ article.image.url }}" class="img-responsive" style="width: 400px;height: 300px;">
+            </div>
+            <div class="feed-content" style="     flex: 2;
+     order: 2;
+">
+                <h2 class="text-center">{{ category.name }}</h2>
+                <p style="margin:25px;">{{ article.content|truncatewords:40 }}</p>
+                <a href="{{ article.get_absolute_url }}"><button class="btn btn-primary cdb" style="margin-top: 75px; margin-left: 25px;">Читать полностью</button></a>
+            </div>
+            </div>   </div></div>
+        {% endfor %}
+{% endblock content %}

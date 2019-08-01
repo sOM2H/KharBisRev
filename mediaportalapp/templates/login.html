@@ -1,0 +1,22 @@
+{% extends 'index.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+<section id="login-page">
+    <div class="container text-center login">
+        <div class="">Авторизация пользователя</div>
+            <div class="">
+                <form action="" method="POST">
+                    {{ form.error }}
+                    {% csrf_token %}
+                    {{ form|crispy }}<br>
+                    <button type="submit" id="login" class="btn btn-primary">Войти </button>
+    
+                </form>
+            </div>
+        <p>
+            <a href="{% url 'registration' %}" class="header__login__link">Еще не зарегестрированы?</a>
+        </p>
+    </div>
+</section>
+<!--нужно выровнять форму и отцентровать ее, по примеру второго дива. Предложение о регистрации оформить, сделать более крупным и  читаемым-->
+{% endblock content %}

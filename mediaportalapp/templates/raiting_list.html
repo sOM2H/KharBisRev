@@ -1,0 +1,40 @@
+{% extends 'index.html' %}
+{% block content %}
+        {% for raiting in raitings %}
+ <div class="container">
+        <div class="rating-box wow fadeInDown">
+
+        <div class="rating-box-image">
+                {% if raiting.image %}
+
+            <img src="{{ raiting.image.url }}" alt="">
+            {% endif %}
+
+        </div>
+        <div class="rating-box-content">
+            <p class="rating-box-author">{{ raiting.author }}</p>
+            <p class="rating-box-author-date">{{ raiting.created }}</p>
+            <a href="">
+            <h2 class="rating-box-content-title"> 
+                    <a href="{{ raiting.get_absolute_url }}"> {{ raiting.title }} </a>
+            </h2></a>
+                <p class="rating-box-content-text">{{ raiting.content|truncatewords:40  }}</p>
+            </a>
+    
+        </div>
+        
+    </div>
+</div>
+
+        <script>
+                wow = new WOW( {
+                        boxClass:     'wow',
+                        animateClass: 'animated',
+                        offset:       100
+                    }
+                );
+            
+                wow.init();
+            </script>  
+{% endfor %}
+{% endblock content %}

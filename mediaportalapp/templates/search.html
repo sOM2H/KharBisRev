@@ -1,0 +1,33 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="search__result" style="border: solid 1px lightgray;padding: 24px;">
+    <h1>Найденные результаты по статьям: {{ founded_articles.count }}</h1>
+    {% for article in founded_articles %}
+
+    <h2 class="search__title" style="color:#111;margin-bottom: 24px;font-size: 32px;"><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h2>
+    <p class="search_content" style="font-size: 26px;">{{ article.content|truncatewords:30}}</p>
+
+    {% endfor %}
+</div>
+
+<div class="search__result" style="border: solid 1px lightgray;
+padding: 24px;">
+    <h1>Найденные результаты по календарю: {{ founded_events.count }}</h1>
+
+    {% for event in founded_events %}
+    <h2 class="search__title" style="color:#111;
+    margin-bottom: 24px;
+    font-size: 32px;
+    text-align: center;
+    font-weight: 700;"><a href="{{ event.get_absolute_url }}">{{ event.title }}</a></h2>
+    <p class="search_content" style="font-size: 26px;font-weight: 500;">{{ event.notes|truncatewords:30}}</p>
+    {% endfor %}
+
+</div>
+
+{% endblock content %}
+
+
+
+
+

@@ -1,0 +1,122 @@
+{% include 'meta.html' %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"> 
+    {% include 'header.html'%}  
+    <title>KBR</title>
+</head>
+<body>
+{% block content %}
+    <section class="main__banner" id="main__banner">
+    <div class="container-banner">
+        <div class="main__banner__box-logo">
+            <div class="main__banner__box-text-box">
+            <h1 class="banner__text-box-title">KHARKIV BUSINESS REVIEW</h1>
+                <p class="banner__text-box-subtitle">Аналитика для ваших решений</p>
+            </div>
+        </div>
+    </div>
+</section>
+        <div class="cat-navigation">
+            <div class="container">
+            <ul>
+                {% for category in categories %} 
+                {% if forloop.first %}
+                <li class="active"><a href="#{{ category.slug }}" class="category" data-slug='{{ category.slug }}' aria-controls='{{ category.slug }}' role="tab" data-toggle="tab">{{ category.name }}</a></li>
+                {% else %}
+                <li><a href="#{{ category.slug }}" class="category" data-slug='{{ category.slug }}' aria-controls='{{ category.slug }}' role="tab" data-toggle="tab">{{ category.name }}</a></li>              
+                
+                {% endif %}
+                {% endfor %}
+            </ul>
+            </div>
+        </div>
+        
+        <div class="container ">
+                 
+                <div class="cat-box">
+                    {% for article in tab_articles %}
+                    {% if article.category.slug == "novosti-bisnessa" %}   
+                    <div class="show_articles_by_category">
+    
+    
+                    <img src="{{ article.image.url }}" alt="" class="cat-img">
+                    <a href="{{ article.get_absolute_url }}" class="cat-link"> <h3 class="cat-title">{{ article.title }}</h3>
+                    <p class="cat-content">{{ article.content|truncatewords:20 }}</p>
+                    
+                    </a>
+                </div>
+                </div>
+                
+                    
+                {% endif %}
+                {% endfor %}
+            </div>
+                
+        </div>
+        <div class="cat-navigation">
+                <div class="container">
+                        <li ><a role="tab" data-toggle="tab">Остальные посты</a></li>
+                </div>
+        </div>        
+        <div class="container ">
+                 
+                <div class="cat-box">
+                        <div class="show_articles_by_category">
+                        {% for articl in articles_all %}   
+                        <img src="{{ articl.image.url }}" alt="" class="cat-img">
+                        <a href="{{ articl.get_absolute_url }}" class="cat-link"> <h3 class="cat-title">{{ articl.title }}</h3>
+                        <p class="cat-content">{{ articl.content|truncatewords:20 }}</p>
+                        
+                        </a>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                    
+                        
+                </div>
+                    
+            </div>
+{% block jquery %}
+
+<script>
+    $(document).ready(function(){
+        $('.category').on('click', function(){
+            var category_slug = $(this).attr('data-slug')
+            console.log(category_slug)
+            data = {
+                category_slug: category_slug
+            }  
+            $('.show_articles_by_category').html('')
+            $.ajax({
+                type:'GET',
+                url: "{% url 'articles_by_category' %}",
+                dataType:'json',
+                data:data,
+                success:function(data){
+                    $.each(data, function(field){
+                        for(i=0; i<=data[field].length-1; i++){
+                            $('.show_articles_by_category').append('<br><div  style="margin-bottom:15px;"><div class="col-sm-2">'+
+                            '<img src="http://127.0.0.1:8000/media/'+data[field][i]['image']+'" style="width:150px; height=100px;"></div>'+
+                            '<div><ul style="list-style-type:none;"><li>'+'<a href="'+category_slug+'/'+data[field][i]['slug']+'">'+data[field][i]['title']+'</a></li></ul></div></div>')
+                        }
+                    })
+                                    }
+
+
+            })      
+        })
+    })
+</script>
+{% endblock jquery %}
+</body>
+{% endblock content %}
+{% include 'footer.html' %}
+
+</html>

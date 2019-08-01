@@ -1,0 +1,133 @@
+/* Large desktops and laptops */
+@media (min-width: 1200px) {
+
+}
+
+/* Portrait tablets and medium desktops */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .analytics__wrapper {
+        grid-template-columns: repeat(2,1fr);
+    }
+    .container__calendar {
+        margin: 0;
+    }
+    .video-view-video iframe {
+        width: 315px;
+    }
+}
+
+/* Portrait tablets and small desktops */
+@media (min-width: 768px) and (max-width: 991px) {
+    .analytics__wrapper {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .analytics-middle {
+        width: 100%;
+        margin-right: 70px;
+        text-align: center;
+    }
+
+    .analytics-bottom {
+        width: 70%;
+        text-align: center;
+    }
+
+    .container-footer {
+        margin: 0 5%;
+    }
+
+    .header__icons {
+        display: none;
+    }
+
+    .video-view-video iframe {
+        width: 320px;
+    }
+    .calendar-feed-box {
+        display: block;
+    border-bottom: none;
+    }
+    .calendar-feed-box img {
+        display: none;
+    }
+    .calendar-feed-box-date {
+        text-align: center;
+        font-size: 44px;
+    }
+    .calendar-feed-box-button {
+        margin-right: 100px;
+    }
+    .calendar-feed-box:hover {
+        border-bottom: none;
+    }
+}
+
+/* Landscape phones and portrait tablets */
+@media (max-width: 767px) {
+    .analytics__wrapper {
+        grid-template-columns: repeat(1,1fr);
+    }
+    .analytics-middle {
+        width: 100%;
+        margin-right: 70px;
+        text-align: center;
+    }
+    .analytics-bottom {
+        width: 70%;
+        text-align: center;
+    }
+    .header {
+        position: relative;
+    }
+    .header__navigation ul {
+        text-align: center;
+        display: block;
+    }
+    .header__navigation li a {
+        border-bottom: solid 1px white;
+        padding: 12px 0;
+    }
+    .header__navigation li {
+        border-right: none;
+        margin: 12px 0;
+    }
+    .container-footer {
+        margin: 0 5%;
+    }
+
+    .header__icons {
+        display: none;
+    }
+
+    .video-view-video iframe {
+        width: 320px;
+    }
+    .calendar-feed-box {
+        display: block;
+        border-bottom: none;
+    }
+    .calendar-feed-box img {
+        display: none;
+    }
+    .calendar-feed-box-date {
+        text-align: center;
+        font-size: 44px;
+    }
+    .calendar-feed-box-button {
+        margin-right: 100px;
+    }
+    .calendar-feed-box:hover {
+        border-bottom: none;
+    }
+    .footer__feed-back input{
+        width: 100%;
+    }
+}
+
+/* Landscape phones and smaller */
+@media (max-width: 480px) {
+
+}
+
+

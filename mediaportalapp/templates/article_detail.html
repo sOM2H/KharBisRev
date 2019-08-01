@@ -1,0 +1,44 @@
+{% extends 'index.html' %}
+
+
+
+{% block content %}
+<div class="container post">
+    <h1 class="text-center"> {{ article.title }}</h1>
+    <hr>
+    <p class="text-center"><img src="{{ article.image.url }} "class="post-image"></p>
+    <p id='article' data-id="{{ article.id }}" class="post-content"> {{ article.content|safe }}</p>
+
+    <div class="like">
+    {% if not request.user.is_authenticated %}
+    <a href="{% url 'registration' %}">Авторизируйтесь для оценки поста</a>
+    {% else %}
+    <a href="#" id="like" ><i class="fa fa-heart-o" aria-hidden="true"></i></a><span  id="liked">{{ article.like }}</span>
+    {% endif %}
+</div>        
+    <br>
+            <span class="glyphicon glyphicon-search"></span>
+        </div>
+<script>
+    $(document).ready(function(){
+        $('#like').on('click', function(e){
+            e.preventDefault()
+            var like = 'like'
+            var article_id = $('#article').attr('data-id')
+            data = {
+                article_id: article_id,
+                like: like
+            }
+            $.ajax({
+                type: 'GET',
+                url: "{% url 'user_reaction' %}",
+                dataType: 'json',
+                data: data,
+                success: function(data){
+                    $('#like').html(data.like)
+                }
+            })
+        })
+    })
+</script>
+{% endblock content %}
