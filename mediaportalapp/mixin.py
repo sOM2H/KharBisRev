@@ -1,5 +1,6 @@
 from django.views.generic.list import MultipleObjectMixin
-from .models import Category, Article, Event
+
+from .models import Category,  Article
 
 class CategoryAndArticlesListMixin(MultipleObjectMixin):
     
@@ -10,13 +11,3 @@ class CategoryAndArticlesListMixin(MultipleObjectMixin):
         
         return context
 
-
-class CategoryAndEventListMixin(MultipleObjectMixin):
-
-
-    def get_context_data(self, *args, **kwargs):
-        context = {}
-        context['categories'] = Category.objects.all()
-        context['event'] = Event.objects.all()
-        
-        return context

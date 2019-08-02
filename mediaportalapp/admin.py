@@ -12,12 +12,6 @@ import calendar
 from django.core.urlresolvers import reverse
 
 
-
-
- 
- 
-
-
 class ArticleAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title', )}
     list_display = ['category', 'title', 'content', 'created']
