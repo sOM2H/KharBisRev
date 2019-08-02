@@ -1,51 +1,35 @@
 # -- coding: utf-8 --
+
 from __future__ import unicode_literals
 
 from django.http import HttpResponseRedirect
-
 from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.shortcuts import render
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
+from django.http import JsonResponse
+from django.views import View
+from django.db.models import Q
+from datetime import datetime, timedelta
+from calendar import HTMLCalendar
 
 from .mixin import CategoryAndArticlesListMixin
-
-from django.shortcuts import render
-
-from django.views.generic.detail import DetailView
-
-from django.views.generic.list import ListView
-
-from .models import Article, Category, UserAccount, Raiting, Event, VideoDownloading
-
-from django.http import JsonResponse
-
-from django.views import View
-
 from .forms import RegistrationForm, LoginForm
-
-from django.db.models import Q
-
-from datetime import datetime, timedelta
-
-from calendar import HTMLCalendar
+from .models import (Article, 
+                     Category,
+                     UserAccount,
+                     Raiting,
+                     Event,
+                     VideoDownloading)
 
 
 
 User = get_user_model()
 
 
-class ArticleListView(ListView):
-
-    model = Article
-
-    template_name = 'index.html'
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(ArticleListView, self).get_context_data(*args, **kwargs)
-        context['articles'] = self.model.objects.filter().order_by('-created')
-
-        return context
-
-
 class CategoryListView(ListView, CategoryAndArticlesListMixin):
+
+    """Shows full list of categories and new articles on main pages"""
 
     model = Category
 
@@ -54,14 +38,15 @@ class CategoryListView(ListView, CategoryAndArticlesListMixin):
     def get_context_data(self, *args, **kwargs):
         context = super(CategoryListView, self).get_context_data(*args, **kwargs)
         context['categories'] = self.model.objects.all()
-        context['articles'] = Article.objects.all()[:4]
-        context['article'] = Article.objects.get(id=5)
-        context['articles_all'] = Article.objects.all()[:10]
+        context['articles'] = Article.objects.all()[:9]
+        
         return context
 
 
 class CategoryDetailView(DetailView, CategoryAndArticlesListMixin):
     
+    """Shows the category page and the articles to which it relates"""
+
     model = Category
     
     template_name = 'category_detail.html'
@@ -70,10 +55,14 @@ class CategoryDetailView(DetailView, CategoryAndArticlesListMixin):
         context = super(CategoryDetailView, self).get_context_data(*args, **kwargs)
         context['category'] = self.get_object()
         context['articles_from_category'] = self.get_object().article_set.all()
+        
         return context
 
 class ArticleDetailView(DetailView, CategoryAndArticlesListMixin):
     
+    """Shows the inner page of the article, 
+    returns all the objects of the article the user is on"""
+
     model = Article
     
     template_name = 'article_detail.html'
@@ -81,18 +70,15 @@ class ArticleDetailView(DetailView, CategoryAndArticlesListMixin):
     def get_context_data(self, *args, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(*args, **kwargs)
         context['article'] = self.get_object()
+        
         return context
-
-def dynamic_article_image(request):
-    article_id = request.GET.get('article_id')
-    article = Article.objects.get(id=article_id)
-    data = {
-        'article_image': article.image.url
-    }
-    return JsonResponse(data)
 
 
 class DynamicArticleImageView(View):
+    
+    """Shows image of article,
+    return url of image as a JSON"""
+
     def get(self, *args, **kwargs):
         article_id = self.request.GET.get('article_id')
         article = Article.objects.get(id=article_id)
@@ -106,6 +92,10 @@ class DynamicArticleImageView(View):
 
 class DisplayArticlesByCategoryView(View):
     
+    """Get slug of category clicked by user
+    from request, filter which articles depends by this category,
+    return list articles as JSON object"""
+
     template = 'index.html'
     
     def get(self,request, *args, **kwargs):
