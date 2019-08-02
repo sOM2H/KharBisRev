@@ -68,10 +68,10 @@
                  
                 <div class="cat-box">
                         <div class="show_articles_by_category">
-                        {% for articl in articles_all %}   
+                        {% for articl in articles %}   
                         <img src="{{ articl.image.url }}" alt="" class="cat-img">
                         <a href="{{ articl.get_absolute_url }}" class="cat-link"> <h3 class="cat-title">{{ articl.title }}</h3>
-                        <p class="cat-content">{{ articl.content|truncatewords:20 }}</p>
+                        <p class="cat-content">{{ articl.content|truncatewords:21 }}</p>
                         
                         </a>
                         </div>
@@ -84,7 +84,6 @@
                     
             </div>
 {% block jquery %}
-
 <script>
     $(document).ready(function(){
         $('.category').on('click', function(){
@@ -114,6 +113,7 @@
         })
     })
 </script>
+
 {% endblock jquery %}
 </body>
 {% endblock content %}

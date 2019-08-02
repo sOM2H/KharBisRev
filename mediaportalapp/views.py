@@ -1,38 +1,35 @@
 # -- coding: utf-8 --
+
 from __future__ import unicode_literals
+
 from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model, authenticate, login, logout
-from .mixin import CategoryAndArticlesListMixin, CategoryAndEventListMixin
 from django.shortcuts import render
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from .models import Article, Category, UserAccount, Raiting, Event, VideoDownloading
 from django.http import JsonResponse
 from django.views import View
-from .forms import RegistrationForm, LoginForm
 from django.db.models import Q
 from datetime import datetime, timedelta
 from calendar import HTMLCalendar
+
+from .mixin import CategoryAndArticlesListMixin
+from .forms import RegistrationForm, LoginForm
+from .models import (Article, 
+                     Category,
+                     UserAccount,
+                     Raiting,
+                     Event,
+                     VideoDownloading)
 
 
 
 User = get_user_model()
 
 
-class ArticleListView(ListView):
-
-    model = Article
-
-    template_name = 'index.html'
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(ArticleListView, self).get_context_data(*args, **kwargs)
-        context['articles'] = self.model.objects.filter().order_by('-created')
-
-        return context
-
-
 class CategoryListView(ListView, CategoryAndArticlesListMixin):
+
+    """Shows full list of categories and new articles on main pages"""
 
     model = Category
 
@@ -41,14 +38,15 @@ class CategoryListView(ListView, CategoryAndArticlesListMixin):
     def get_context_data(self, *args, **kwargs):
         context = super(CategoryListView, self).get_context_data(*args, **kwargs)
         context['categories'] = self.model.objects.all()
-        context['articles'] = Article.objects.all()[:4]
-        context['article'] = Article.objects.get(id=5)
-        context['articles_all'] = Article.objects.all()[:10]
+        context['articles'] = Article.objects.all()[:9]
+        
         return context
 
 
 class CategoryDetailView(DetailView, CategoryAndArticlesListMixin):
     
+    """Shows the category page and the articles to which it relates"""
+
     model = Category
     
     template_name = 'category_detail.html'
@@ -57,10 +55,15 @@ class CategoryDetailView(DetailView, CategoryAndArticlesListMixin):
         context = super(CategoryDetailView, self).get_context_data(*args, **kwargs)
         context['category'] = self.get_object()
         context['articles_from_category'] = self.get_object().article_set.all()
+        
         return context
+
 
 class ArticleDetailView(DetailView, CategoryAndArticlesListMixin):
     
+    """Shows the inner page of the article, 
+    returns all the objects of the article the user is on"""
+
     model = Article
     
     template_name = 'article_detail.html'
@@ -68,41 +71,52 @@ class ArticleDetailView(DetailView, CategoryAndArticlesListMixin):
     def get_context_data(self, *args, **kwargs):
         context = super(ArticleDetailView, self).get_context_data(*args, **kwargs)
         context['article'] = self.get_object()
+        
         return context
-
-def dynamic_article_image(request):
-    article_id = request.GET.get('article_id')
-    article = Article.objects.get(id=article_id)
-    data = {
-        'article_image': article.image.url
-    }
-    return JsonResponse(data)
 
 
 class DynamicArticleImageView(View):
+    
+    """Shows image of article,
+    return url of image as a JSON"""
+
     def get(self, *args, **kwargs):
         article_id = self.request.GET.get('article_id')
         article = Article.objects.get(id=article_id)
+        
         data = {
         'article_image': article.image.url
         }
+        
         return JsonResponse(data)
 
 
 class DisplayArticlesByCategoryView(View):
     
+    """Get slug of category clicked by user
+    from request, filter which articles depends by this category,
+    return list articles as JSON object"""
+
     template = 'index.html'
     
     def get(self,request, *args, **kwargs):
         category_slug = self.request.GET.get('category_slug')
         articles = list(Article.objects.filter(category=Category.objects.get(slug=category_slug)).values('title', 'image', 'slug'))
+        
         data = {
             'articles':articles
         }
+        
         return JsonResponse(data)
 
 
 class UserReactionView(View):
+
+    """Get article_id by request,
+       show count of likes on the page,
+       check if user didnt like it,
+       add like on the page by user and to the DB,
+       return ad JSON object"""
 
     template_name = 'article_detail.html'
     
@@ -110,13 +124,16 @@ class UserReactionView(View):
         article_id = self.request.GET.get('article_id')
         article = Article.objects.get(id=article_id)
         like = self.request.GET.get('like')
+        
         if like and (request.user not in article.users_reaction.all()):
             article.like += 1
             article.users_reaction.add(request.user)
             article.save()
+        
         data = {
             'like': article.like
         }
+        
         return JsonResponse(data)
 
 
@@ -125,10 +142,13 @@ class RegistrationView(View):
     template_name = 'registration.html'
     
     def get(self, request, *args, **kwargs):
+        
         form = RegistrationForm(request.POST or None)
+        
         context = {
             'form': form
         }
+        
         return render(self.request, self.template_name, context)
     
     def post(self, request,*args, **kwargs):
@@ -185,6 +205,9 @@ class LoginView(View):
 
 
 class RaitingListView(ListView):
+
+    """Return all objects from Raiting model as list filter by created time"""
+
     
     model = Raiting
     
@@ -199,6 +222,9 @@ class RaitingListView(ListView):
 
 
 class RaitingDetailView(DetailView):
+
+    """Return info about Raiting object by slug field"""
+
     
     model = Raiting
     
@@ -210,6 +236,9 @@ class RaitingDetailView(DetailView):
 
 
 class SearchView(View):
+
+    """Return all founded objects from Article and Event tables"""
+
     template_name = 'search.html'
 
     def get(self, request, *args, **kwargs):
@@ -231,7 +260,9 @@ class SearchView(View):
 
 
 class EventListView(ListView):
-    
+
+    """Return all objects from Event model as list filter by created time"""
+
     model = Event
     
     template_name = 'event_list.html'
@@ -243,6 +274,8 @@ class EventListView(ListView):
         return context
 
 class EventDetailView(DetailView):
+
+    """Return info about Event object by slug field"""
     
     model = Event
 
@@ -250,13 +283,16 @@ class EventDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(EventDetailView, self).get_context_data(*args, **kwargs)
+        
         return context
 
 
 
 
 class VideoDownloadingView(ListView):
-
+    
+    """Return all objects from VideoDownloading model as list filter by created time"""
+    
     model = VideoDownloading
     
     template_name = 'videooverview.html'
