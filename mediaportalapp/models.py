@@ -27,23 +27,6 @@ class Category(models.Model):
         verbose_name = u'Категория'
         verbose_name_plural = u'Категории'
 
-class CategoryOtrasli(models.Model):
-    
-    name = models.CharField(u'Название',max_length=100)
-    
-    slug = models.SlugField(u'Ссылка')
-    
-    def __unicode__(self):
-        return self.name
-
-    #def get_absolute_url(self):
-        #return reverse('category_detail', kwargs={'slug': self.slug})
-    
-    class Meta:
-        verbose_name = u'Категория'
-        verbose_name_plural = u'Категории'
-
-
 def generate_filename(instance, filename):
     filename = instance.slug + '.jpg'
     return "{0}/{1}".format(instance.slug, filename)
@@ -70,16 +53,7 @@ class Article(models.Model):
         verbose_name = u'Пост'
         verbose_name_plural = u'Посты'
 
-class ArticleOtrasli(models.Model):
-    category = models.ForeignKey(CategoryOtrasli, verbose_name=u"Категория",on_delete=models.CASCADE)
-    title = models.CharField(u'Заголовок',max_length=120)
-    slug = models.SlugField(u'Ссылка')
-    image = models.ImageField(u'Фотография',upload_to=generate_filename)
-    content = models.TextField(u'Контент')
-    author = models.TextField(u'Автор',default='')
-    like = models.PositiveIntegerField(u'Лайки',default=0)
-    users_reaction = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name=u'Кто отреагировал на пост', blank=True)
-    created = models.DateTimeField(default=timezone.now)
+
 
 
 class UserAccount(models.Model):

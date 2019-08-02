@@ -1,17 +1,30 @@
 # -- coding: utf-8 --
 from __future__ import unicode_literals
+
 from django.http import HttpResponseRedirect
+
 from django.contrib.auth import get_user_model, authenticate, login, logout
-from .mixin import CategoryAndArticlesListMixin, CategoryAndEventListMixin
+
+from .mixin import CategoryAndArticlesListMixin
+
 from django.shortcuts import render
+
 from django.views.generic.detail import DetailView
+
 from django.views.generic.list import ListView
+
 from .models import Article, Category, UserAccount, Raiting, Event, VideoDownloading
+
 from django.http import JsonResponse
+
 from django.views import View
+
 from .forms import RegistrationForm, LoginForm
+
 from django.db.models import Q
+
 from datetime import datetime, timedelta
+
 from calendar import HTMLCalendar
 
 
@@ -83,9 +96,11 @@ class DynamicArticleImageView(View):
     def get(self, *args, **kwargs):
         article_id = self.request.GET.get('article_id')
         article = Article.objects.get(id=article_id)
+        
         data = {
         'article_image': article.image.url
         }
+        
         return JsonResponse(data)
 
 
@@ -96,9 +111,11 @@ class DisplayArticlesByCategoryView(View):
     def get(self,request, *args, **kwargs):
         category_slug = self.request.GET.get('category_slug')
         articles = list(Article.objects.filter(category=Category.objects.get(slug=category_slug)).values('title', 'image', 'slug'))
+        
         data = {
             'articles':articles
         }
+        
         return JsonResponse(data)
 
 
@@ -110,13 +127,16 @@ class UserReactionView(View):
         article_id = self.request.GET.get('article_id')
         article = Article.objects.get(id=article_id)
         like = self.request.GET.get('like')
+        
         if like and (request.user not in article.users_reaction.all()):
             article.like += 1
             article.users_reaction.add(request.user)
             article.save()
+        
         data = {
             'like': article.like
         }
+        
         return JsonResponse(data)
 
 
@@ -125,10 +145,13 @@ class RegistrationView(View):
     template_name = 'registration.html'
     
     def get(self, request, *args, **kwargs):
+        
         form = RegistrationForm(request.POST or None)
+        
         context = {
             'form': form
         }
+        
         return render(self.request, self.template_name, context)
     
     def post(self, request,*args, **kwargs):
@@ -210,6 +233,7 @@ class RaitingDetailView(DetailView):
 
 
 class SearchView(View):
+
     template_name = 'search.html'
 
     def get(self, request, *args, **kwargs):
