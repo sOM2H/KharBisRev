@@ -58,6 +58,7 @@ class CategoryDetailView(DetailView, CategoryAndArticlesListMixin):
         
         return context
 
+
 class ArticleDetailView(DetailView, CategoryAndArticlesListMixin):
     
     """Shows the inner page of the article, 
@@ -110,6 +111,12 @@ class DisplayArticlesByCategoryView(View):
 
 
 class UserReactionView(View):
+
+    """Get article_id by request,
+       show count of likes on the page,
+       check if user didnt like it,
+       add like on the page by user and to the DB,
+       return ad JSON object"""
 
     template_name = 'article_detail.html'
     
@@ -198,6 +205,9 @@ class LoginView(View):
 
 
 class RaitingListView(ListView):
+
+    """Return all objects from Raiting model as list filter by created time"""
+
     
     model = Raiting
     
@@ -212,6 +222,9 @@ class RaitingListView(ListView):
 
 
 class RaitingDetailView(DetailView):
+
+    """Return info about Raiting object by slug field"""
+
     
     model = Raiting
     
@@ -223,6 +236,8 @@ class RaitingDetailView(DetailView):
 
 
 class SearchView(View):
+
+    """Return all founded objects from Article and Event tables"""
 
     template_name = 'search.html'
 
@@ -245,7 +260,9 @@ class SearchView(View):
 
 
 class EventListView(ListView):
-    
+
+    """Return all objects from Event model as list filter by created time"""
+
     model = Event
     
     template_name = 'event_list.html'
@@ -257,6 +274,8 @@ class EventListView(ListView):
         return context
 
 class EventDetailView(DetailView):
+
+    """Return info about Event object by slug field"""
     
     model = Event
 
@@ -264,13 +283,16 @@ class EventDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(EventDetailView, self).get_context_data(*args, **kwargs)
+        
         return context
 
 
 
 
 class VideoDownloadingView(ListView):
-
+    
+    """Return all objects from VideoDownloading model as list filter by created time"""
+    
     model = VideoDownloading
     
     template_name = 'videooverview.html'

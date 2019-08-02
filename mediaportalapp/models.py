@@ -1,20 +1,23 @@
 # -- coding: utf-8 --
+
 from django.db import models
 from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
-from embed_video.fields import EmbedVideoField
 from django.utils import timezone
 
+from embed_video.fields import EmbedVideoField
 
+
+def generate_filename(instance, filename):
+    filename = instance.slug + '.jpg'
+    return "{0}/{1}".format(instance.slug, filename)
 
 
 class Category(models.Model):
-    
-    name = models.CharField(u'Название',max_length=100)
-    
+    name = models.CharField(u'Название',max_length=100)  
     slug = models.SlugField(u'Ссылка')
     
     def __unicode__(self):
@@ -26,10 +29,6 @@ class Category(models.Model):
     class Meta:
         verbose_name = u'Категория'
         verbose_name_plural = u'Категории'
-
-def generate_filename(instance, filename):
-    filename = instance.slug + '.jpg'
-    return "{0}/{1}".format(instance.slug, filename)
 
 
 class Article(models.Model):
@@ -54,8 +53,6 @@ class Article(models.Model):
         verbose_name_plural = u'Посты'
 
 
-
-
 class UserAccount(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name=u'Пользователь', on_delete=models.CASCADE)
     email = models.EmailField(u'Эмейл')
@@ -70,7 +67,6 @@ class UserAccount(models.Model):
     class Meta:
         verbose_name = u'Пользователь'
         verbose_name_plural = u'Пользователи'
-
 
 
 class Raiting(models.Model):
